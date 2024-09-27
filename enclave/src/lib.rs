@@ -34,7 +34,7 @@ use sgx_types::error::SgxStatus;
 // along with the HyperPlonk library. If not, see <https://mit-license.org/>.
 
 
-use std::{fs::File, io::{self, Cursor, Read}, string::ToString, time::Instant};
+use std::{fs::File, io::{self, Read}, string::ToString, time::Instant};
 
 use ark_bls12_381::{Bls12_381, Fr};
 use ark_serialize::{CanonicalDeserialize, CanonicalSerialize, Write};
@@ -193,12 +193,13 @@ fn bench_mock_circuit_zkp_helper(
     Ok(())
 }
 
-use std::vec::Vec;
-
 /// # Safety
 #[no_mangle]
 pub unsafe extern "C" fn say_something(some_string: *const u8, some_len: usize) -> SgxStatus {
     println!("hello from the other side!");
+
+    let thread = 8;
+    println!("start benchmark with #{} threads", thread);
 
     let mut rng = test_rng();
     let pcs_srs = {
@@ -222,12 +223,13 @@ pub unsafe extern "C" fn say_something(some_string: *const u8, some_len: usize) 
 
     println!("SRS written.");
             
-    let thread = 1;
+    
 
     bench_jellyfish_plonk(&pcs_srs, thread).unwrap();
     println!();
     bench_vanilla_plonk(&pcs_srs, thread).unwrap();
     println!();
+
     for degree in MIN_CUSTOM_DEGREE..=MAX_CUSTOM_DEGREE {
         bench_high_degree_plonk(&pcs_srs, degree, thread).unwrap();
         println!();
