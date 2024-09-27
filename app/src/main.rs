@@ -23,6 +23,7 @@ use sgx_types::types::*;
 use sgx_urts::enclave::SgxEnclave;
 
 static ENCLAVE_FILE: &str = "enclave.signed.so";
+static SRS_PARAMS_FILE: &str = "/root/sgx/vendor/hyperplonk/hyperplonk/srs.params";
 
 extern "C" {
     fn say_something(
@@ -32,6 +33,10 @@ extern "C" {
         len: usize,
     ) -> SgxStatus;
 }
+
+use std::fs::File;
+use std::io::Read;
+
 
 fn main() {
     let enclave = match SgxEnclave::create(ENCLAVE_FILE, true) {
@@ -45,15 +50,18 @@ fn main() {
         }
     };
 
-    let input_string = String::from("This is a normal world string passed into Enclave!\n");
     let mut retval = SgxStatus::Success;
+
+    let mut srs_file = File::open(SRS_PARAMS_FILE).unwrap();
+    let mut buffer = Vec::new();
+    srs_file.read_to_end(&mut buffer).unwrap();
 
     let result = unsafe {
         say_something(
             enclave.eid(),
             &mut retval,
-            input_string.as_ptr() as *const u8,
-            input_string.len(),
+            buffer.as_ptr() as *const u8,
+            buffer.len(),
         )
     };
     match result {

@@ -34,7 +34,7 @@ use sgx_types::error::SgxStatus;
 // along with the HyperPlonk library. If not, see <https://mit-license.org/>.
 
 
-use std::{fs::File, io, time::Instant};
+use std::{fs::File, io::{self, Cursor, Read}, string::ToString, time::Instant};
 
 use ark_bls12_381::{Bls12_381, Fr};
 use ark_serialize::{CanonicalDeserialize, CanonicalSerialize, Write};
@@ -59,8 +59,10 @@ const MAX_CUSTOM_DEGREE: usize = 32;
 const HIGH_DEGREE_TEST_NV: usize = 15;
 
 fn read_srs() -> Result<MultilinearUniversalParams<Bls12_381>, io::Error> {
-    let mut f = File::open("/root/sgx/vendor/hyperplonk/hyperplonk/srs.params")?;
-    Ok(MultilinearUniversalParams::<Bls12_381>::deserialize_compressed_unchecked(&mut f).unwrap())
+    let mut f = File::open("srs.params")?;
+    MultilinearUniversalParams::<Bls12_381>::deserialize_compressed_unchecked(&mut f).map_err(|e|{
+        io::Error::new(io::ErrorKind::Other, e.to_string())
+    })
 }
 
 fn write_srs(pcs_srs: &MultilinearUniversalParams<Bls12_381>) {
@@ -191,6 +193,7 @@ fn bench_mock_circuit_zkp_helper(
     Ok(())
 }
 
+use std::vec::Vec;
 
 /// # Safety
 #[no_mangle]
@@ -214,8 +217,11 @@ pub unsafe extern "C" fn say_something(some_string: *const u8, some_len: usize) 
         }
     };
 
-    return SgxStatus::Success;
+    // let pcs_srs =MultilinearKzgPCS::<Bls12_381>::gen_srs_for_testing(&mut rng, SUPPORTED_SIZE).unwrap();
+    // write_srs(&pcs_srs);
 
+    println!("SRS written.");
+            
     let thread = 1;
 
     bench_jellyfish_plonk(&pcs_srs, thread).unwrap();
