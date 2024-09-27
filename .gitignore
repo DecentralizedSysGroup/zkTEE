@@ -1,0 +1,5 @@
+lib
+sysroot
+bin
+enclave/target
+app/target

@@ -1,0 +1,4 @@
+[submodule "vendor/incubator-teaclave-sgx-sdk"]
+	path = vendor/incubator-teaclave-sgx-sdk
+	url = https://github.com/apache/incubator-teaclave-sgx-sdk
+	branch = v2.0.0-preview
