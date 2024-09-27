@@ -3,12 +3,13 @@
 set -euo pipefail
 
 CONTAINER_NAME=sgx-starter
-DOCKER_IMAGE=sgx-sdk-20.04
+DOCKER_IMAGE=bl4ck5un/rust-sgx-sdk:v2.0.0-preview
 
 if docker container inspect $CONTAINER_NAME > /dev/null 2>&1; then
   docker start -ai $CONTAINER_NAME
 else
   docker run \
+    --platform linux/amd64 \
     -v $PWD:/root/sgx \
     -ti \
     --hostname $CONTAINER_NAME \
