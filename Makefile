@@ -85,14 +85,14 @@ App_Name := $(CUSTOM_BIN_PATH)/app
 # BUILD_STD=no       use no_std
 # BUILD_STD=cargo    use cargo-std-aware
 # BUILD_STD=xargo    use xargo
-BUILD_STD ?= xargo
+BUILD_STD ?= cargo
 
 Rust_Build_Target := x86_64-unknown-linux-sgx
 Rust_Target_Path := $(ROOT_DIR)/vendor/incubator-teaclave-sgx-sdk/rustlib
 
 ifeq ($(BUILD_STD), cargo)
 	Rust_Build_Std := $(Rust_Build_Flags) -Zbuild-std=core,alloc
-	Rust_Std_Features := --features stdio
+	Rust_Std_Features := --features stdio,thread,untrusted_time,unsupported_process,untrusted_fs
 	Rust_Target_Flags := --target $(Rust_Target_Path)/$(Rust_Build_Target).json
 	Rust_Sysroot_Path := $(CURDIR)/sysroot
 	Rust_Sysroot_Flags := RUSTFLAGS="--sysroot $(Rust_Sysroot_Path)"
@@ -172,13 +172,13 @@ app:
 .PHONY: enclave
 enclave:
 ifeq ($(BUILD_STD), cargo)
-	@cd $(Rust_Target_Path)/std && cargo build $(Rust_Build_Std) $(Rust_Target_Flags) $(Rust_Std_Features)
+	cd $(Rust_Target_Path)/std && cargo build $(Rust_Build_Std) $(Rust_Target_Flags) $(Rust_Std_Features)
 
-	@rm -rf $(Rust_Sysroot_Path)
-	@mkdir -p $(Rust_Sysroot_Path)/lib/rustlib/$(Rust_Build_Target)/lib
-	@cp -r $(Rust_Target_Path)/std/target/$(Rust_Build_Target)/$(Rust_Build_Out)/deps/* $(Rust_Sysroot_Path)/lib/rustlib/$(Rust_Build_Target)/lib
+	rm -rf $(Rust_Sysroot_Path)
+	mkdir -p $(Rust_Sysroot_Path)/lib/rustlib/$(Rust_Build_Target)/lib
+	cp -r $(Rust_Target_Path)/std/target/$(Rust_Build_Target)/$(Rust_Build_Out)/deps/* $(Rust_Sysroot_Path)/lib/rustlib/$(Rust_Build_Target)/lib
 
-	@cd enclave && $(Rust_Sysroot_Flags) cargo build $(Rust_Target_Flags) $(RustEnclave_Build_Flags)
+	cd enclave && $(Rust_Sysroot_Flags) cargo build $(Rust_Target_Flags) $(RustEnclave_Build_Flags)
 
 else ifeq ($(BUILD_STD), xargo)
 	@cd enclave && RUST_TARGET_PATH=$(Rust_Target_Path) xargo build --target $(Rust_Build_Target) $(RustEnclave_Build_Flags)

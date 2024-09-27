@@ -29,5 +29,13 @@ crate-type = ["staticlib"]
 default = []
 
 [target.'cfg(not(target_vendor = "teaclave"))'.dependencies]
-sgx_types = { branch = "v2.0.0-preview", git = "https://github.com/apache/teaclave-sgx-sdk.git" }
-sgx_tstd = { branch = "v2.0.0-preview", git = "https://github.com/apache/teaclave-sgx-sdk.git" }
+sgx_types = { path = "../vendor/incubator-teaclave-sgx-sdk/sgx_types"}
+sgx_tstd = { path = "../vendor/incubator-teaclave-sgx-sdk/sgx_tstd" }
+
+
+[dependencies]
+hyperplonk = {path = "../vendor/hyperplonk/hyperplonk"}
+subroutines = { path = "../vendor/hyperplonk/subroutines" }
+ark-serialize = { version = "^0.4.0", default-features = false, features = [ "derive" ] }
+ark-std = { version = "^0.4.0", default-features = false }
+ark-bls12-381 = { version = "0.4.0", default-features = false, features = [ "curve" ] }
