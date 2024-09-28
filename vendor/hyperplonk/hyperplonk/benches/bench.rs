@@ -29,7 +29,7 @@ const MAX_CUSTOM_DEGREE: usize = 32;
 const HIGH_DEGREE_TEST_NV: usize = 15;
 
 fn main() -> Result<(), HyperPlonkErrors> {
-    let thread = rayon::current_num_threads();
+    let thread = 8;
     println!("start benchmark with #{} threads", thread);
     let mut rng = test_rng();
     let pcs_srs = {
@@ -58,7 +58,9 @@ fn main() -> Result<(), HyperPlonkErrors> {
 
 fn read_srs() -> Result<MultilinearUniversalParams<Bls12_381>, io::Error> {
     let mut f = File::open("srs.params")?;
-    Ok(MultilinearUniversalParams::<Bls12_381>::deserialize_compressed_unchecked(&mut f).unwrap())
+    MultilinearUniversalParams::<Bls12_381>::deserialize_compressed_unchecked(&mut f).map_err(|e|{
+        io::Error::new(io::ErrorKind::Other, e.to_string())
+    })
 }
 
 fn write_srs(pcs_srs: &MultilinearUniversalParams<Bls12_381>) {

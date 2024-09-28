@@ -4,3 +4,4 @@ bin
 enclave/target
 app/target
 enclave_[ut].[hoc]
+Cargo.lock
