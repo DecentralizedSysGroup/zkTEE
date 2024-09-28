@@ -1,8 +1,36 @@
 I ported [hyperplonk](https://github.com/EspressoSystems/hyperplonk) (dc194f83ef5cae523b869f7256f314bdbeb2a42c) to SGX using Rust SGX SDK v2.
 
-Some preliminary performance comparision. Ceveat: code is not optimized for TEE. Untrusted threads are used for benchmark. The panelty is up to 5x within the range of tested parameters.
+Some preliminary performance comparison. Caveat: code is not optimized for TEE. Untrusted threads are used for benchmark. The penalty is up to 5x within the range of tested parameters.
 
 ![Runtime Comparison](perf/linear.png)
+
+# To run the benchmark
+
+## With SGX
+
+Create a docker env for testing:
+
+```
+# on a SGX enabled server (e.g., /dev/sgx/enclave exists)
+./start-docker-real-sgx.sh
+```
+
+In the docker container:
+
+```
+> cd /sgx
+> make all # build
+> make run # run
+```
+
+## To generate hyperplonk benchmark results
+
+```
+> cd /sgx/vendor/hyperplonk/hyperplonk
+> cargo bench
+```
+
+# Raw results
 
 ## In SGX
 
