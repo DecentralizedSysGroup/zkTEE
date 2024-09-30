@@ -1,6 +1,7 @@
-I ported [hyperplonk](https://github.com/EspressoSystems/hyperplonk) (dc194f83ef5cae523b869f7256f314bdbeb2a42c) to SGX using Rust SGX SDK v2.
+I ported [hyperplonk](https://github.com/EspressoSystems/hyperplonk) (dc194f83ef5cae523b869f7256f314bdbeb2a42c) to SGX using Rust SGX SDK v2, to get some preliminary performance comparison. The current implementation of hyperplonk is not zk, but adding zk should not significantly affect performance. 
 
-Some preliminary performance comparison. Caveat: code is not optimized for TEE. Untrusted threads are used for benchmark. The penalty is up to 5x within the range of tested parameters.
+Caveat: code is not optimized for TEE. Untrusted threads are used for benchmark. The penalty is up to 5x within the range of tested parameters.
+
 
 ![Runtime Comparison](perf/linear.png)
 
