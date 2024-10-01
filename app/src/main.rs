@@ -23,7 +23,6 @@ use sgx_types::types::*;
 use sgx_urts::enclave::SgxEnclave;
 
 static ENCLAVE_FILE: &str = "enclave.signed.so";
-static SRS_PARAMS_FILE: &str = "/root/sgx/vendor/hyperplonk/hyperplonk/srs.params";
 
 extern "C" {
     fn say_something(
@@ -52,9 +51,7 @@ fn main() {
 
     let mut retval = SgxStatus::Success;
 
-    let mut srs_file = File::open(SRS_PARAMS_FILE).unwrap();
     let mut buffer = Vec::new();
-    srs_file.read_to_end(&mut buffer).unwrap();
 
     let result = unsafe {
         say_something(

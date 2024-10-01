@@ -39,3 +39,11 @@ subroutines = { path = "../vendor/hyperplonk/subroutines" }
 ark-serialize = { version = "^0.4.0", default-features = false, features = [ "derive" ] }
 ark-std = { version = "^0.4.0", default-features = false }
 ark-bls12-381 = { version = "0.4.0", default-features = false, features = [ "curve" ] }
+
+jf-plonk = {git = "https://github.com/EspressoSystems/jellyfish", default-features = false, features = ["test-srs"]}
+jf-utils = { version = "0.4.4", git = "https://github.com/EspressoSystems/jellyfish", tag = "0.4.5", default-features = false }
+jf-relation = { version = "0.4.4", git = "https://github.com/EspressoSystems/jellyfish", tag = "0.4.5", default-features = false }
+ark-ff = { version = "0.4.0", default-features = false, features = [ "asm" ] }
+ark-bls12-377 = { version = "0.4.0", default-features = false, features = [ "curve" ] }
+ark-bn254 = { version = "0.4.0", default-features = false, features = [ "curve" ] }
+ark-bw6-761 = { version = "0.4.0", default-features = false }

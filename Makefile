@@ -92,10 +92,10 @@ Rust_Target_Path := $(ROOT_DIR)/vendor/incubator-teaclave-sgx-sdk/rustlib
 
 ifeq ($(BUILD_STD), cargo)
 	Rust_Build_Std := $(Rust_Build_Flags) -Zbuild-std=core,alloc
-	Rust_Std_Features := --features stdio,thread,untrusted_time,unsupported_process,untrusted_fs
+	Rust_Std_Features := --features stdio,thread,untrusted_time,unsupported_process,untrusted_fs,backtrace
 	Rust_Target_Flags := --target $(Rust_Target_Path)/$(Rust_Build_Target).json
 	Rust_Sysroot_Path := $(CURDIR)/sysroot
-	Rust_Sysroot_Flags := RUSTFLAGS="--sysroot $(Rust_Sysroot_Path)"
+	Rust_Sysroot_Flags := RUSTFLAGS="--sysroot $(Rust_Sysroot_Path) --cfg no_core_num_saturating"  # serde 1.0.210 uses core::num::saturating
 endif
 
 RustEnclave_Build_Flags := $(Rust_Build_Flags)

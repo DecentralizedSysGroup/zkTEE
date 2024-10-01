@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-CONTAINER_NAME=sgx-starter
+CONTAINER_NAME=zkTEE
 DOCKER_IMAGE=bl4ck5un/rust-sgx-sdk:v2.0.0-preview
 
 if docker container inspect $CONTAINER_NAME > /dev/null 2>&1; then
