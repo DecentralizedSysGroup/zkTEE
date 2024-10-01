@@ -1,6 +1,11 @@
-I ported [hyperplonk](https://github.com/EspressoSystems/hyperplonk) (dc194f83ef5cae523b869f7256f314bdbeb2a42c) to SGX using Rust SGX SDK v2, to get some preliminary performance comparison. The current implementation of hyperplonk is not zk, but adding zk should not significantly affect performance. 
+# Generating (zk)SNARK in TEE
 
-Caveat: code is not optimized for TEE. Untrusted threads are used for benchmark. The penalty is up to 5x within the range of tested parameters.
+Running SNARK proofs in TEE for private outsourcing and supporting multiple inputs (colab zkSNARK).
+
+I've been porting some SNARK implementation to SGX to get some preliminary perf numbers. Caveat: code is not optimized for TEE. Untrusted threads are used for benchmark. 
+
+- [hyperplonk](https://github.com/EspressoSystems/hyperplonk) (dc194f83ef5cae523b869f7256f314bdbeb2a42c). The current implementation of hyperplonk is not zk, but adding zk should not significantly affect performance. The penalty is up to 5x within the range of tested parameters.
+- [jellyfish](https://github.com/EspressoSystems/jellyfish/). PLONK ZKP.
 
 
 ![Runtime Comparison](perf/linear.png)
